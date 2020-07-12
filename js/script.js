@@ -18,8 +18,8 @@ function clock() {
    //.getMinutes() - получает минуты
    //.getHours() - получает часы
    let secDeg = time.getSeconds() * 6,
-       minDeg = time.getMinutes() * 6,
-       hourDeg = time.getHours() * 30;
+      minDeg = time.getMinutes() * 6,
+      hourDeg = time.getHours() * 30;
    //htmlEl.style - добавляет css стили к этому элементу в html
    // console.log(s.style);
    s.style = `transform: rotate(${secDeg}deg)`;
@@ -70,14 +70,48 @@ for (let i = 0; i < links.length; i++) {
    })
 }
 // console.log(links);
-let itr = 0,
-   sec = document.querySelector('.stopwatch__seconds'),
-   min = document.querySelector('.minutes'),
-   hour = document.querySelector('.stopwatch__hours');
-function stopwatch() {
-   itr++;
-   console.log(itr);
-   setTimeout(() =>stopwatch(), 1000);
-}
 
-stopwatch();
+//================================Секундомер===============================//
+const watchBtn = document.querySelector('.stopwatch__btn'),
+   secondsWatch = document.querySelector('.stopwatch__seconds'),
+   minutesWatch = document.querySelector('.minutes'),
+   hoursWatch = document.querySelector('.stopwatch__hours'),
+   infoSpan = document.querySelector('.tabsLink__span');
+watchBtn.addEventListener('click', function(){
+   if(this.innerHTML == 'start'){
+      this.innerHTML = 'stop';
+      infoSpan.classList.add('active');
+      let sec = 0;
+      setTimeout(stopWatch, 1000, this, sec);
+   }
+   else if(this.innerHTML == 'stop'){
+      this.innerHTML = 'clear';
+      infoSpan.classList.remove('active');
+      infoSpan.classList.add('active_clear');
+   }
+   else{
+      this.innerHTML = 'start';
+      infoSpan.classList.remove('active_clear');
+      secondsWatch.innerHTML = 0;
+      minutesWatch.innerHTML = 0;
+      hoursWatch.innerHTML = 0;
+   }
+})
+function stopWatch(btn, sec){
+   if(btn.innerHTML == 'stop'){
+      if(sec == 59){
+         sec = 0;
+         secondsWatch.innerHTML = sec;
+         if(minutesWatch.innerHTML == 59){
+            minutesWatch.innerHTML = 0;
+            hoursWatch.innerHTML++;
+         }
+         else minutesWatch.innerHTML++;
+      }
+      else{
+         sec++;
+         secondsWatch.innerHTML = sec;
+      }
+      setTimeout(stopWatch, 1000, btn, sec);
+   }
+}
